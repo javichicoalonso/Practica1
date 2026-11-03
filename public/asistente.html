@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- Autores: Álvaro Martínez Rubio, Javier Chico Alonso -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="asistente.css">
+  <script src="asistente-datos.js" defer></script>
+  <script src="asistente.js" defer></script>
+  <title>Asistente del grado — Grado en Ciencia de Datos e IA — CUNEF Universidad</title>
+</head>
+<body>
+
+  <header>
+    <h1>Asistente del grado</h1>
+    <p>Elige un tema y pulsa la pregunta que quieras</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="plan-estudios.html">Plan de estudios</a>
+    <a href="admision.html">Admisión</a>
+    <a href="noticias.html">Noticias</a>
+    <a href="salidas-profesionales.html">Salidas profesionales</a>
+    <a href="calculadora-notas.html">Calculadora de notas</a>
+    <a href="asistente.html">Asistente</a>
+  </nav>
+
+  <main>
+
+    <section id="introduccion-asistente">
+      <h2>Habla con el asistente</h2>
+      <p>
+        Elige una categoría y pulsa una de sus preguntas: el asistente responde con la información
+        de las páginas de este sitio y, para las asignaturas, consulta la API de la aplicación.
+        <strong>No es una inteligencia artificial</strong>: las preguntas y respuestas están
+        escritas de antemano. Nada de lo que hagas se guarda.
+      </p>
+    </section>
+
+    <section id="chat" aria-labelledby="titulo-chat">
+      <h2 id="titulo-chat" class="solo-lectores">Conversación</h2>
+
+      <div id="mensajes" class="mensajes" role="log" aria-live="polite" aria-label="Conversación con el asistente"></div>
+
+      <h3 class="titulo-panel">1. Elige una categoría</h3>
+      <div id="categorias" class="categorias" role="group" aria-label="Categorías de preguntas"></div>
+
+      <h3 class="titulo-panel">2. Pulsa una pregunta</h3>
+      <div id="preguntas" class="sugerencias" role="group" aria-label="Preguntas de la categoría"></div>
+
+      <p><button type="button" id="borrar" class="secundario">Borrar chat</button></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <img src="logo_cunef.png" alt="Logotipo de CUNEF Universidad" width="80" height="80">
+    <p>&copy; 2026 CUNEF Universidad.<br>Práctica 1 - Programación de Aplicaciones Web</p>
+    <a href="index.html">Volver al inicio</a>
+    <a href="https://www.cunef.edu/">Web oficial de CUNEF Universidad</a>
+  </footer>
+
+</body>
+</html>
