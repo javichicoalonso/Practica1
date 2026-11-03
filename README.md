@@ -16,10 +16,12 @@ Requiere Node.js 18 o superior.
 ```bash
 npm install
 npm start        # servidor en http://localhost:3000
+npm run dev      # igual, pero se reinicia al guardar cambios
 npm test         # pruebas (con el servidor ya arrancado, en otra terminal)
 ```
 
-- `npm start` reinicia el servidor al guardar cambios (usa `node --watch`). `npm run dev` hace lo mismo.
+- `npm start` arranca el servidor. `npm run dev` lo arranca y lo reinicia al guardar cambios (usa `node --watch`).
+- El puerto por defecto es el 3000. Se puede cambiar con la variable `PORT`: en un archivo `.env` en la raíz (`PORT=4000`) o en la propia orden (`PORT=4000 npm start`). El `.env` es opcional y no se sube al repositorio.
 - `npm test` ejecuta las pruebas de `tests/`, que hacen peticiones HTTP a la API en marcha. Si el servidor está en otro puerto: `BASE_URL=http://localhost:4000 npm test`.
 - Comprobación rápida: `curl http://localhost:3000/health` responde `{"status":"ok"}`.
 
@@ -48,7 +50,19 @@ Los campos que no estén en la tabla no se guardan. Los tipos son estrictos: `"6
 | PATCH | `/asignaturas/:id` | — | 200 con la asignatura modificada | 400 si un campo es inválido o no se envía ninguno; 404 |
 | DELETE | `/asignaturas/:id` | — | 204 sin cuerpo | 404 |
 
-Otras respuestas:
+### Rutas generales (fuera del recurso)
+
+| Método | Ruta | Respuesta correcta | Notas |
+|---|---|---|---|
+| GET | `/health` | 200 `{"status":"ok"}` | Comprueba que el servidor está vivo. |
+| GET | `/echo/:message` | 200 `{"echo":"<message>"}` | Ejemplo de clase de parámetro de ruta: `/echo/hola` responde `{"echo":"hola"}`, y `/echo/a%20b` responde `{"echo":"a b"}`. Sin texto (`/echo` o `/echo/`) responde 404. |
+| GET | `/` | 200, la página `index.html` (HTML) | Contenido estático de `public/`. |
+| GET | `/<archivo>` de `public/` | 200 con el archivo (por ejemplo `/asignaturas.html` o `/styles.css`) | Contenido estático. Si el archivo no existe, 404 JSON. |
+
+Estas rutas no forman parte del recurso `asignatura` y solo admiten GET: con otro método (por ejemplo `POST /health`) responden 404 `{"error":"Route not found"}`.
+
+### Otras respuestas
+
 - Ruta inexistente: 404 `{"error":"Route not found"}`.
 - Asignatura inexistente: 404 `{"error":"Subject not found"}`.
 - JSON mal formado: 400 `{"errors":[{"field":"body","message":"..."}]}`.
@@ -195,20 +209,3 @@ AI/                                      agents.md y review-log.md
 ```
 
 ## Cliente web (`public/`)
-
-- **`asignaturas.html` + `app.js`**: la aplicación del recurso. Listado, formulario de creación y edición, buscador y filtros (área, tipo y curso) que construyen la consulta para la API, ordenación, resumen, y estados de carga, error y lista vacía. Cada fila tiene Editar y Eliminar. Los errores 400 se muestran junto a cada campo, y se comprueba `response.ok` en cada `fetch`.
-- **`index.html`**: portada del sitio de los laboratorios, que enlaza a la aplicación. El profesor indicó en clase que las funciones pueden repartirse entre páginas.
-- Páginas de los laboratorios: `plan-estudios.html`, `admision.html`, `noticias.html`, `asignatura-detalle.html`.
-- Extras que consultan la API con `fetch` y no guardan datos: `calculadora-notas.html` (nota media), `asistente.html` (preguntas y respuestas preparadas) y `salidas-profesionales.html`.
-
-## Agentes de IA
-
-La carpeta `AI/` documenta el trabajo con agentes:
-- **Tester** (caja negra): solo recibió este README y la API en marcha, y generó las pruebas de `tests/`.
-- **Code reviewer** (adicional, caja blanca y solo lectura): revisó `src/` y `public/`.
-
-`AI/agents.md` recoge la configuración, el contrato y las comprobaciones, y `AI/review-log.md` recoge lo que se aceptó, corrigió o rechazó, y por qué.
-
-## Limitaciones conocidas
-
-Detectadas en la revisión y no corregidas en esta entrega (detalle en `AI/review-log.md`): la ordenación por texto no trata bien las tildes, el buscador no codifica caracteres como `&` o `#`, y un cuerpo JSON de más de 100 KB devuelve 500 en lugar de 413.
